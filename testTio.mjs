@@ -45,7 +45,7 @@ client.on("connect", () => {
     let gain = 0;
     const MAX_GAIN = 66;
     setInterval(() => {
-        //set48V(ch, muted);
+        set48V(ch, muted);
         setGain(ch, gain);
         // setMute(ch, muted);
         // ch = ch === 8 ? 1 : ch + 1;

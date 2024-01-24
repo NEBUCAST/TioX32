@@ -1,0 +1,13 @@
+{
+  "name": "tiox32",
+  "version": "1.0.0",
+  "description": "A Bridge for Gain and Phantom Power Control of TIO via X32.",
+  "scripts": {
+    "tio": "node testTio.js",
+    "x32": "node testX32.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "osc": "^2.4.4"
+  }
+}
