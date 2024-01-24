@@ -1,69 +1,64 @@
-import osc from 'osc'
+//@ts-check
+import osc from "osc";
+
+const PORT = 10023;
+const IP = process.argv[2];
+
+if (!IP) {
+  console.log("Please specify IP address");
+  process.exit(1);
+}
 
 function pulse() {
-    try {
-        oscPort.send({
-            address: '/xremote',
-            args: [],
-        })
-    } catch (e) {
-        // Ignore
-    }
+  try {
+    oscPort.send({
+      address: "/xremote",
+      args: [],
+    });
+  } catch (e) {
+    // Ignore
+  }
 }
 
 var oscPort = new osc.UDPPort({
-    localAddress: '0.0.0.0',
-    localPort: 0,
-    broadcast: true,
-    metadata: true,
-    remoteAddress: "192.168.113.4",
-    remotePort: 10023,
-})
+  localAddress: "0.0.0.0",
+  localPort: 0,
+  broadcast: true,
+  metadata: true,
+  remoteAddress: IP,
+  remotePort: PORT,
+});
 
-oscPort.on('error', (err) => {
-    console.log('error', `Error: ${err.message}`)
-})
+oscPort.on("error", (err) => {
+  console.log("error", `Error: ${err.message}`);
+});
 
-oscPort.on('ready', () => {
-    pulse()
-    const heartbeat = setInterval(() => {
-        pulse()
-    }, 1500)
-    const doSync = () => {
-        if (oscPort) {
-            try {
-                oscPort.send({ address: '/xinfo', args: [] })
-                oscPort.send({ address: '/-snap/name', args: [] })
-                oscPort.send({ address: '/-snap/index', args: [] })
-            } catch (e) {
-                // Ignore
-            }
-        }
+oscPort.on("ready", () => {
+  pulse();
+
+  setInterval(() => {
+    pulse();
+  }, 1500);
+
+  const doSync = () => {
+    if (oscPort) {
+      try {
+        oscPort.send({ address: "/xinfo", args: [] });
+      } catch (e) {
+        // Ignore
+      }
     }
+  };
 
-    doSync()
-})
+  doSync();
+});
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-oscPort.on('close', () => {
-    console.log('closed')
-})
+oscPort.on("close", () => {
+  console.log("closed");
+});
 
-oscPort.on('message', (message) => {
-    console.log('Message', message)
-})
+oscPort.on("message", (message) => {
+  console.log("Message", message);
+});
 
 oscPort.open();
-
-// // For most Ports, send() should only be called after the "ready" event fires.
-// oscPort.on("ready", function () {
-//     oscPort.send({
-//         address: "/carrier/frequency",
-//         args: [
-//             {
-//                 type: "f",
-//                 value: 440
-//             }
-//         ]
-//     });
-// });

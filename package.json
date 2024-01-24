@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "A Bridge for Gain and Phantom Power Control of TIO via X32.",
   "scripts": {
-    "tio": "node testTio.js",
-    "x32": "node testX32.js"
+    "tio": "node testTio.mjs",
+    "x32": "node testX32.mjs"
   },
   "license": "MIT",
   "dependencies": {
